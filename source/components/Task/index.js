@@ -1,8 +1,12 @@
 // Core
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from "react";
 
 // Instruments
-import Styles from './styles.m.css';
+import Styles from "./styles.m.css";
+import Checkbox from "../../theme/assets/Checkbox";
+import Edit from "../../theme/assets/Edit";
+import Remove from "../../theme/assets/Remove";
+import Star from "../../theme/assets/Star";
 
 export default class Task extends PureComponent {
     _getTaskShape = ({
@@ -18,6 +22,37 @@ export default class Task extends PureComponent {
     });
 
     render () {
-        return <li className = { Styles.task }>Задача: стартовая точка</li>;
+        const { id, completed, favorite, message } = this.props;
+
+        return (
+            <li className = { Styles.task }>
+                <div className = { Styles.content }>
+                    <div className = { Styles.toggleTaskCompletedState }>
+                        <Checkbox
+                            checked = { false }
+                            color1 = '#3b8ef3'
+                            color2 = '#ffffff'
+                        />
+                    </div>
+                    <input
+                        maxLength = { 50 }
+                        type = 'text'
+                        disabled
+                        value = { message }
+                    />
+                </div>
+                <div className = { Styles.actions }>
+                    <div className = { Styles.toggleTaskFavoriteState }>
+                        <Star />
+                    </div>
+                    <div className = { Styles.updateTaskMessageOnClick }>
+                        <Edit />
+                    </div>
+                    <div className = { Styles.removeTask }>
+                        <Remove />
+                    </div>
+                </div>
+            </li>
+        );
     }
 }
