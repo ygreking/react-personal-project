@@ -57,3 +57,18 @@ export class BaseTaskModel {
         this.message = message;
     }
 }
+
+export const encodeQueryString = (params) => {
+    const keys = Object.keys(params);
+
+    return keys.length
+        ? `?${keys
+            .map(
+                (key) =>
+                    `${encodeURIComponent(key)}=${encodeURIComponent(
+                        params[key]
+                    )}`
+            )
+            .join("&")}`
+        : "";
+};

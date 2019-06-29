@@ -31,12 +31,13 @@
             display: flex;
             align-items: center;
             margin-right: 1.9rem;
+            width: 100%;
         }
 
         & input[type='text'] {
             width: 100%;
             border-color: transparent;
-
+            
             &:not([disabled]) {
                 border-color: var(--paletteColor3);
             }
