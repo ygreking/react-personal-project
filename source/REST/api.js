@@ -1,6 +1,6 @@
-import { ROOT_URL, MAIN_URL, TOKEN } from './config';
+import { MAIN_URL, TOKEN } from './config';
 
-import { encodeQueryString } from '../instruments/helpers';
+import { encodeQueryString } from '../instruments/';
 
 export const api = {
     fetchTasks: async (params) => {
@@ -38,14 +38,18 @@ export const api = {
 
         return data;
     },
-    updateTask: async (params) => {
+    updateTask: async (taskUpdateData) => {
+        const body = Array.isArray(taskUpdateData)
+            ? taskUpdateData
+            : [taskUpdateData];
+
         const response = await fetch(MAIN_URL, {
             method:  'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization:  TOKEN,
             },
-            body: JSON.stringify(params),
+            body: JSON.stringify(body),
         });
         const data = await response.json();
 

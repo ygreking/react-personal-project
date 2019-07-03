@@ -6,6 +6,7 @@ import Styles from './styles.m.css';
 import { api } from '../../REST'; // ! Импорт модуля API должен иметь именно такой вид (import { api } from '../../REST')
 
 // Components
+import Checkbox from '../../theme/assets/Checkbox';
 import Spinner from '../../components/Spinner';
 import Task from '../../components/Task';
 
@@ -50,11 +51,14 @@ export default class Scheduler extends Component {
         }
     };
 
-    _createTaskAsync = async (message) => {
+    _createTaskAsync = async (event) => {
+        event.preventDefault();
         this._setTaskFetchingState(true);
 
         try {
-            const { data: task } = await api.createTask(message);
+            const { data: task } = await api.createTask(
+                this.state.newTaskMessage
+            );
 
             this.setState(({ tasks }) => ({
                 tasks:          [task, ...tasks],
@@ -66,11 +70,15 @@ export default class Scheduler extends Component {
         }
     };
 
-    _updateTaskAsync = async (task) => {
+    _updateTaskAsync = async (taskUpdateData) => {
         this._setTaskFetchingState(true);
 
         try {
-            const { data: updatedTask } = await api.updateTask([task]);
+            let { data: updatedTask } = await api.updateTask(taskUpdateData);
+
+            updatedTask = Array.isArray(updatedTask)
+                ? updatedTask[0]
+                : updatedTask;
 
             this.setState(({ tasks }) => ({
                 tasks: tasks.map((task) =>
@@ -103,15 +111,6 @@ export default class Scheduler extends Component {
         });
     };
 
-    _handleNewTaskKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            this._createTaskAsync(this.state.newTaskMessage);
-        } else if (event.key === 'Escape') {
-            console.log('cancel new task');
-        }
-    };
-
     render () {
         const { tasks, isTaskFetching, newTaskMessage } = this.state;
 
@@ -135,14 +134,13 @@ export default class Scheduler extends Component {
                         <input placeholder = 'Поиск' type = 'search' />
                     </header>
                     <section>
-                        <form>
+                        <form onSubmit = { this._createTaskAsync }>
                             <input
                                 maxLength = '50'
                                 placeholder = 'Описание новой задачи'
                                 type = 'text'
                                 value = { newTaskMessage }
                                 onChange = { this._updateNewTaskMessage }
-                                onKeyPress = { this._handleNewTaskKeyPress }
                             />
                             <button>Добавить задачу</button>
                         </form>
@@ -151,8 +149,14 @@ export default class Scheduler extends Component {
                         </div>
                     </section>
                     <footer>
-                        <div />
-                        <span className = { Styles.completeAllTasks } />
+                        <Checkbox
+                            checked = { false }
+                            color1 = '#363636'
+                            color2 = '#ffffff'
+                        />
+                        <span className = { Styles.completeAllTasks }>
+                            Все задачи выполнены
+                        </span>
                     </footer>
                 </main>
             </section>

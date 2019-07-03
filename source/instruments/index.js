@@ -2,5 +2,6 @@ export {
     getDisplayName,
     sortTasksByDate,
     sortTasksByGroup,
-    BaseTaskModel
-} from "./helpers";
+    BaseTaskModel,
+    encodeQueryString
+} from './helpers';
