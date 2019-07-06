@@ -72,7 +72,6 @@ export default class Task extends PureComponent {
     };
 
     _updateTaskMessageOnClick = (event) => {
-        event.preventDefault();
         if (this.state.isTaskEditing) {
             this._updateTask();
 
@@ -82,13 +81,11 @@ export default class Task extends PureComponent {
     };
 
     _updateTaskMessageOnKeyDown = (event) => {
+        if (this.state.newMessage === '') {
+            return null;
+        }
         if (event.key === 'Enter') {
-            event.preventDefault();
-            if (this.state.newMessage === '') {
-                return null;
-            }
             this._updateTask();
-
         } else if (event.key === 'Escape') {
             this._cancelUpdatingTaskMessage();
         }
