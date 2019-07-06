@@ -140,34 +140,35 @@ export default class Scheduler extends Component {
         }
     };
 
+    _sortTasks = (tasks) => {
+        return [...tasks]
+            .sort((next, prev) => {
+                return next.created < prev.created
+                    ? 1
+                    : next.created === prev.created
+                        ? 0
+                        : -1;
+            })
+            .sort((next, prev) => {
+                return next.favorite < prev.favorite
+                    ? 1
+                    : next.favorite === prev.favorite
+                        ? 0
+                        : -1;
+            })
+            .sort((next, prev) => {
+                return next.completed > prev.completed
+                    ? 1
+                    : next.completed === prev.completed
+                        ? 0
+                        : -1;
+            });
+    };
+
     render () {
         const { tasks, isTasksFetching, newTaskMessage } = this.state;
-        const sortTasks = (tasks) => {
-            return [...tasks]
-                .sort((next, prev) => {
-                    return next.created < prev.created
-                        ? 1
-                        : next.created === prev.created
-                            ? 0
-                            : -1;
-                })
-                .sort((next, prev) => {
-                    return next.favorite < prev.favorite
-                        ? 1
-                        : next.favorite === prev.favorite
-                            ? 0
-                            : -1;
-                })
-                .sort((next, prev) => {
-                    return next.completed > prev.completed
-                        ? 1
-                        : next.completed === prev.completed
-                            ? 0
-                            : -1;
-                });
-        };
 
-        const tasksJSX = sortTasks(tasks).map((task) => {
+        const tasksJSX = this._sortTasks(tasks).map((task) => {
             if (
                 task.message.toLowerCase().indexOf(this.state.tasksFilter) !==
                 -1
